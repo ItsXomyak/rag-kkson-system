@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+chroma_db/
+model_cache/
+data/pdfs/
+__pycache__
+*.pyc
+.venv
+.mypy_cache
+.pytest_cache
+README.md

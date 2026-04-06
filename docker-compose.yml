@@ -1,0 +1,20 @@
+services:
+  rag:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/pdfs:/app/data/pdfs        # PDF files
+      - ./chroma_db:/app/chroma_db         # Vector database
+      - ./model_cache:/app/model_cache     # Cached embedding model
+    env_file:
+      - .env
+    environment:
+      - CHROMA_PATH=/app/chroma_db
+      - MODEL_CACHE_DIR=/app/model_cache
+    restart: unless-stopped
+    # Memory limit — bge-m3 needs ~1.5GB for loading + inference
+    deploy:
+      resources:
+        limits:
+          memory: 3G

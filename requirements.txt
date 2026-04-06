@@ -1,0 +1,35 @@
+# RAG KKSON — Dependencies
+# Python 3.11+
+
+# Web framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+jinja2==3.1.4
+
+# PDF parsing
+PyMuPDF==1.25.1
+
+# Text splitting (only this package from langchain ecosystem)
+langchain-text-splitters==0.3.4
+
+# Embeddings
+sentence-transformers==3.3.1
+torch==2.5.1
+torchvision==0.20.1
+
+# Vector database
+chromadb==0.5.23
+
+# LLM (OpenAI-compatible API for Qwen 3 via Alem AI)
+openai==1.58.1
+
+# Environment
+python-dotenv==1.0.1
+
+# Scraping (for scripts/scrape_articles.py)
+httpx==0.28.1
+beautifulsoup4==4.12.3
+lxml==5.3.0
+
+# Testing (dev only)
+pytest==8.3.4
