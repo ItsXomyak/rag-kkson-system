@@ -398,4 +398,4 @@ python -m pytest tests/ -v
 
 ## License
 
-This project was developed as part of academic research at [your university].
+This project was developed as part of academic research at AIU.

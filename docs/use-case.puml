@@ -1,0 +1,98 @@
+@startuml RAG_KKSON_Use_Case
+
+left to right direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Inter
+skinparam defaultFontSize 13
+
+skinparam usecase {
+  BackgroundColor #F0EDFF
+  BorderColor #6C5CE7
+  FontSize 13
+  FontColor #1a1b25
+}
+
+skinparam actor {
+  FontSize 14
+  FontStyle bold
+}
+
+skinparam rectangle {
+  BorderColor #6C5CE7
+  BorderThickness 2
+  RoundCorner 15
+  FontSize 16
+  FontStyle bold
+  BackgroundColor white
+}
+
+skinparam arrow {
+  Color #6C5CE7
+  FontSize 11
+  FontColor #8b8d9e
+}
+
+actor "Исследователь" as R
+actor "Администратор" as A
+
+rectangle "RAG KKSON System" {
+
+  package "Поиск" {
+    usecase "Ввести запрос" as UC1
+    usecase "Указать ключевое\nслово" as UC2
+    usecase "Получить ответ\nсо ссылками" as UC3
+    usecase "Просмотреть\nисточники" as UC4
+  }
+
+  package "Pipeline" <<include>> {
+    usecase "Query Expansion" as UC5
+    usecase "Поиск в ChromaDB" as UC6
+    usecase "Reranking" as UC7
+    usecase "Генерация ответа\n(Qwen 3)" as UC8
+  }
+
+  package "История" {
+    usecase "Просмотреть\nисторию" as UC9
+    usecase "Избранное" as UC10
+    usecase "Загрузить\nпредыдущий поиск" as UC11
+  }
+
+  package "Экспорт и настройки" {
+    usecase "Копировать /\nэкспорт (MD, TXT)" as UC13
+    usecase "Тема / язык\n(RU, KZ, EN)" as UC15
+  }
+
+  package "Администрирование" {
+    usecase "Скрапинг статей" as UC17
+    usecase "Загрузка PDF\nв БД" as UC18
+    usecase "Настройка и\nдеплой" as UC19
+  }
+}
+
+' ── Researcher ──
+R --> UC1
+R --> UC3
+R --> UC4
+R --> UC9
+R --> UC10
+R --> UC11
+R --> UC13
+R --> UC15
+
+' ── Admin ──
+A --> UC17
+A --> UC18
+A --> UC19
+
+' ── Extend ──
+UC2 .> UC1 : <<extend>>
+
+' ── Include chain ──
+UC1 ..> UC5 : <<include>>
+UC5 ..> UC6 : <<include>>
+UC6 ..> UC7 : <<include>>
+UC7 ..> UC8 : <<include>>
+UC8 ..> UC3 : <<include>>
+
+@enduml
