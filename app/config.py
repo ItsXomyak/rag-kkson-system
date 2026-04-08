@@ -56,7 +56,7 @@ class Settings:
         default_factory=lambda: os.getenv("RERANKER_ENABLED", "true").lower() in ("true", "1", "yes")
     )
     reranker_model: str = "BAAI/bge-reranker-v2-m3"
-    reranker_top_k: int = 8  # return top-8 after reranking
+    reranker_top_k: int = 10  # return top-10 after reranking
     reranker_max_length: int = field(
         default_factory=lambda: int(os.getenv("RERANKER_MAX_LENGTH", "256"))
     )
@@ -77,7 +77,7 @@ class Settings:
     llm_model: str = field(
         default_factory=lambda: os.getenv("LLM_MODEL", "qwen3")
     )
-    llm_max_tokens: int = 4096
+    llm_max_tokens: int = 8192
 
     # Server
     host: str = field(default_factory=lambda: os.getenv("HOST", "0.0.0.0"))

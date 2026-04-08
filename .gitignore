@@ -1,9 +1,39 @@
-.env
+# ── Data & Models (large files, not for git) ──
 chroma_db/
 model_cache/
 data/pdfs/*.pdf
+data/pdfs/**/*.pdf
+
+# ── Environment ──
+.env
+.venv/
+venv/
+
+# ── Python ──
 __pycache__/
 *.pyc
-.venv/
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# ── IDE & Tools ──
+.omc/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── Cache ──
 .mypy_cache/
 .pytest_cache/
+.ruff_cache/
+
+# ── Temp & working files ──
+answer.txt
+image.png
+tech-task.md
+TEST_CASES.md
+*.tmp
+*.log
