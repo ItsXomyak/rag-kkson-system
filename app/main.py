@@ -10,7 +10,8 @@ from fastapi.templating import Jinja2Templates
 
 from app.config import settings, BASE_DIR
 from app.ingestion.embedder import collection_count
-from app.retrieval.search import hybrid_search, SearchResult
+from app.retrieval.search import hybrid_search, multi_query_search, SearchResult
+from app.retrieval.query_expander import expand_query
 from app.retrieval.reranker import rerank
 from app.generation.answerer import stream_answer
 
@@ -38,9 +39,9 @@ async def api_search(q: str, keyword: str = "") -> dict:
     if not q.strip():
         return {"results": [], "query": q}
 
-    results = hybrid_search(query=q, keyword=keyword or None)
+    results, queries = _retrieve(q, keyword or None)
     if settings.reranker_enabled:
-        results = rerank(query=q, results=results)
+        results = rerank(query=q, results=results, alt_queries=queries[1:])
     return {
         "query": q,
         "results": [
@@ -62,9 +63,9 @@ async def api_answer(q: str, keyword: str = "") -> StreamingResponse:
 
     Returns Server-Sent Events with the generated text.
     """
-    results = hybrid_search(query=q, keyword=keyword or None)
+    results, queries = _retrieve(q, keyword or None)
     if settings.reranker_enabled:
-        results = rerank(query=q, results=results)
+        results = rerank(query=q, results=results, alt_queries=queries[1:])
 
     def event_stream():
         # First send sources as a JSON event
@@ -94,6 +95,18 @@ async def api_answer(q: str, keyword: str = "") -> StreamingResponse:
 async def api_stats() -> dict:
     """Return collection statistics."""
     return {"total_chunks": collection_count()}
+
+
+def _retrieve(query: str, keyword: str | None) -> tuple[list[SearchResult], list[str]]:
+    """Run query expansion + multi-query search (or plain search if disabled).
+
+    Returns (results, all_queries) where all_queries[0] is the original and
+    the rest are expanded sub-queries (if any).
+    """
+    queries = expand_query(query)
+    if len(queries) > 1:
+        return multi_query_search(queries=queries, keyword=keyword), queries
+    return hybrid_search(query=query, keyword=keyword), queries
 
 
 def _unique_sources(results: list[SearchResult]) -> list[dict]:

@@ -25,10 +25,11 @@ def get_model() -> SentenceTransformer:
     """
     global _model
     if _model is None:
-        logger.info("Loading embedding model '%s'…", settings.embedding_model)
+        logger.info("Loading embedding model '%s' on device '%s'…", settings.embedding_model, settings.embedding_device)
         _model = SentenceTransformer(
             settings.embedding_model,
             cache_folder=settings.embedding_cache_dir,
+            device=settings.embedding_device,
         )
         logger.info("Model loaded. Embedding dimension: %d.", _model.get_sentence_embedding_dimension())
     return _model

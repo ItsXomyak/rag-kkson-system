@@ -28,6 +28,9 @@ class Settings:
     embedding_cache_dir: str = field(
         default_factory=lambda: os.getenv("MODEL_CACHE_DIR", "./model_cache")
     )
+    embedding_device: str = field(
+        default_factory=lambda: os.getenv("EMBEDDING_DEVICE", "cpu")
+    )
 
     # ChromaDB
     chroma_collection: str = "kkson_articles"
@@ -42,15 +45,24 @@ class Settings:
     )
 
     # Retrieval
-    search_top_k: int = 10
-    score_threshold: float = 0.3  # min cosine similarity to keep
+    search_top_k: int = 15
+    score_threshold: float = 0.25  # min cosine similarity to keep
+    query_expansion_enabled: bool = field(
+        default_factory=lambda: os.getenv("QUERY_EXPANSION", "true").lower() in ("true", "1", "yes")
+    )
 
     # Reranker (cross-encoder)
     reranker_enabled: bool = field(
         default_factory=lambda: os.getenv("RERANKER_ENABLED", "true").lower() in ("true", "1", "yes")
     )
     reranker_model: str = "BAAI/bge-reranker-v2-m3"
-    reranker_top_k: int = 5  # return top-5 after reranking top-10
+    reranker_top_k: int = 8  # return top-8 after reranking
+    reranker_max_length: int = field(
+        default_factory=lambda: int(os.getenv("RERANKER_MAX_LENGTH", "256"))
+    )
+    reranker_min_score: float = field(
+        default_factory=lambda: float(os.getenv("RERANKER_MIN_SCORE", "-2.0"))
+    )
     reranker_device: str = field(
         default_factory=lambda: os.getenv("RERANKER_DEVICE", "cpu")
     )

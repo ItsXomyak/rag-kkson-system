@@ -505,36 +505,12 @@
      ══════════════════════════════ */
 
   function extractFollowups(md) {
-    const marker = '## Связанные вопросы';
-    const idx = md.indexOf(marker);
-    if (idx === -1) return { answer: md, followups: [] };
-
-    const answerPart = md.slice(0, idx).trimEnd();
-    const followupPart = md.slice(idx + marker.length);
-    const lines = followupPart.split('\n').filter((l) => l.trim().startsWith('- '));
-    const followups = lines.map((l) => l.replace(/^-\s*/, '').trim()).filter(Boolean).slice(0, 4);
-    return { answer: answerPart, followups };
+    return { answer: md, followups: [] };
   }
 
-  function renderFollowups(followups) {
+  function renderFollowups() {
     const container = $('#followup-chips');
-    if (!container) return;
-    if (followups.length === 0) {
-      container.innerHTML = '';
-      return;
-    }
-    container.innerHTML =
-      `<span class="followup-label">${t('followup_label')}</span>` +
-      followups
-        .map((q) => `<button class="followup-chip" type="button">${escapeHtml(q)}</button>`)
-        .join('');
-
-    container.querySelectorAll('.followup-chip').forEach((chip) => {
-      chip.addEventListener('click', () => {
-        $('#query').value = chip.textContent;
-        doSearch();
-      });
-    });
+    if (container) container.innerHTML = '';
   }
 
   /* ══════════════════════════════
