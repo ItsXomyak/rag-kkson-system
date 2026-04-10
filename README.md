@@ -154,8 +154,8 @@ Content words are extracted from the query and used as a `$contains` filter in C
 
 ```bash
 # 1. Clone and create virtual environment
-git clone https://github.com/<your-username>/rag-kkson.git
-cd rag-kkson
+git clone https://github.com/ItsXomyak/rag-kkson-system.git
+cd rag-kkson-system
 python -m venv .venv
 source .venv/bin/activate        # Linux/Mac
 # .venv/Scripts/activate         # Windows
@@ -166,16 +166,32 @@ pip install -r requirements.txt
 # 3. Configure environment
 cp .env.example .env
 # Edit .env — set your LLM_API_KEY
+```
 
-# 4. Collect articles (automated)
-python -m scripts.scrape_articles all --limit 500
+### Option A: Quick start with pre-built database
 
-# 5. Build vector database
+A pre-built ChromaDB vector database (1094 articles, 315 MB) is available in [Releases](https://github.com/ItsXomyak/rag-kkson-system/releases):
+
+```bash
+# Download and extract chroma_db.tar.gz from the latest release
+tar -xzf chroma_db.tar.gz
+```
+
+### Option B: Build from scratch
+
+```bash
+# Scrape articles from 121 KKSON journals
+python -m scripts.scrape_articles all --limit 3000
+
+# Parse, chunk, embed and store in ChromaDB
 python -m scripts.ingest
 # First run downloads bge-m3 model (~2 GB), then caches locally
+```
 
-# 6. Start server
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+### Run
+
+```bash
+python -m uvicorn app.main:app --host localhost --port 8000
 ```
 
 Open http://localhost:8000
