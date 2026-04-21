@@ -79,10 +79,17 @@
   <!-- ══════════ MAIN ══════════ -->
   <div class="main">
 
-    <!-- Top Bar (mobile) -->
+    <!-- Top Bar (sticky header — desktop + mobile) -->
     <div class="topbar">
       <button class="topbar-menu-btn" onclick="window.__app.toggleSidebar()">☰</button>
       <span class="topbar-title">KKSON RAG</span>
+      <a class="header-admin-btn" href="/admin">
+        <span class="header-admin-btn-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        </span>
+        <span class="header-admin-btn-label">Админ-панель</span>
+        <svg class="header-admin-btn-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
     </div>
 
     <!-- Search Bar -->

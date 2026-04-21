@@ -14,6 +14,7 @@ from app.retrieval.search import hybrid_search, multi_query_search, SearchResult
 from app.retrieval.query_expander import expand_query
 from app.retrieval.reranker import rerank
 from app.generation.answerer import stream_answer
+from app.admin import router as admin_router
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -21,6 +22,8 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="RAG KKSON", description="Поиск по научным журналам ККСОН")
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "app" / "static")), name="static")
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
+
+app.include_router(admin_router)
 
 
 @app.get("/", response_class=HTMLResponse)

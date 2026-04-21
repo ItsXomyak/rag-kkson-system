@@ -90,6 +90,7 @@ body {
 
 .sidebar-new-btn svg { flex-shrink: 0; }
 
+
 /* ── Sidebar Sections ── */
 .sidebar-section {
   padding: 0.5rem 0;
@@ -277,18 +278,22 @@ body {
   flex-direction: column;
 }
 
-/* ── Top Bar ── */
+/* ── Top Bar (sticky header, desktop + mobile) ── */
 .topbar {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.65rem 1rem;
+  padding: 0.6rem 1.25rem;
   border-bottom: 1px solid var(--border);
   background: var(--bg-sidebar);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: saturate(150%) blur(8px);
 }
 
 .topbar-menu-btn {
-  display: flex;
+  display: none;  /* mobile-only via media query */
   align-items: center;
   justify-content: center;
   width: 36px;
@@ -304,10 +309,88 @@ body {
 .topbar-menu-btn:hover { background: var(--bg-hover); }
 
 .topbar-title {
+  display: none;  /* duplicates sidebar logo on desktop, hidden by default */
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text);
 }
+
+/* ── Header Admin Button (prominent, themable, animated) ── */
+.header-admin-btn {
+  position: relative;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.4rem;
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.15s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.2s ease;
+}
+
+.header-admin-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 0;
+}
+
+.header-admin-btn > * { position: relative; z-index: 1; }
+
+.header-admin-btn-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-gradient);
+  color: #fff;
+  border-radius: var(--radius-xs);
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px var(--accent-glow);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.header-admin-btn-label {
+  flex: none;
+  transition: color 0.2s ease;
+}
+
+.header-admin-btn-arrow {
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease;
+}
+
+.header-admin-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px var(--accent-glow);
+}
+
+.header-admin-btn:hover::before { opacity: 1; }
+.header-admin-btn:hover .header-admin-btn-label,
+.header-admin-btn:hover .header-admin-btn-arrow { color: #fff; }
+.header-admin-btn:hover .header-admin-btn-arrow { transform: translateX(3px); opacity: 1; }
+.header-admin-btn:hover .header-admin-btn-icon {
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: none;
+  transform: scale(1.05);
+}
+
+.header-admin-btn:active { transform: translateY(0); }
+.header-admin-btn svg { display: block; }
 
 /* ── Welcome Screen ── */
 .welcome {
@@ -1111,7 +1194,10 @@ body {
   }
 
   .main { margin-left: 0; }
-  .topbar { display: flex; }
+  .topbar-menu-btn { display: flex; }
+  .topbar-title { display: inline; }
+  .header-admin-btn-label { display: none; }  /* compact on mobile — keep icon + chevron */
+  .header-admin-btn { padding: 0.35rem 0.55rem 0.35rem 0.35rem; }
 
   .welcome h1 { font-size: 1.3rem; }
   .welcome-steps { flex-direction: column; gap: 1rem; }
